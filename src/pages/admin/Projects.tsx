@@ -23,13 +23,13 @@ import {
 } from "@/components/ui/alert-dialog";
 
 export default function Projects() {
-  const { projects, loading, refetch } = useProjects();
+  const { projects, refetch } = useProjects();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProject, setEditingProject] = useState<any | null>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [projectToDelete, setProjectToDelete] = useState<any | null>(null);
-  const [isSaving, setIsSaving] = useState(false);
+
 
   const openCreateModal = () => {
     setEditingProject(null);
@@ -48,12 +48,10 @@ export default function Projects() {
 
   const handleDelete = async () => {
     if (!projectToDelete) return;
-    setIsSaving(true);
     try {
       await deleteProject(projectToDelete.id);
       await refetch();
     } finally {
-      setIsSaving(false);
       setIsDeleteModalOpen(false);
       setProjectToDelete(null);
     }
