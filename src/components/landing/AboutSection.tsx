@@ -1,14 +1,23 @@
 import { useEffect, useState } from "react";
-import { getLandingProfile } from "../../services/landing.service";
+import { getLandingProfile,getLandingStats } from "../../services/landing.service";
 
 export default function AboutSection() {
-  const [aboutData, setAboutData] = useState<any>(null);
+ const [profile, setProfile] = useState<any>(null);
+  const [stats, setStats] = useState<any>(null);
 
   useEffect(() => {
-    getLandingProfile().then(setAboutData);
+    async function fetchData() {
+      const profileData = await getLandingProfile();
+      const statsData = await getLandingStats();
+
+      setProfile(profileData);
+      setStats(statsData);
+    }
+
+    fetchData();
   }, []);
 
-  if (!aboutData) return null;
+   if (!profile || !stats) return null;
 
   return (
     <section id="about" className="py-20 bg-background">
@@ -30,7 +39,7 @@ export default function AboutSection() {
               About Us
             </h2>
             <div className="space-y-4 text-muted-foreground leading-relaxed">
-              {(`${aboutData.company_name}, we are committed to delivering exceptional construction and architecture services that exceed our clients' expectations. With over 15 years of experience in the industry, our team of skilled professionals brings expertise, dedication, and innovation to every project.
+              {(`${profile.company_name}, we are committed to delivering exceptional construction and architecture services that exceed our clients' expectations. With over ${stats.experience_years} years of experience in the industry, our team of skilled professionals brings expertise, dedication, and innovation to every project.
 
               We specialize in residential and commercial construction, from luxury homes to large-scale commercial developments. Our approach combines traditional craftsmanship with modern techniques and sustainable practices, ensuring that every structure we build is not only beautiful but also built to last.
 
